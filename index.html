@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Blind Tiger - Apply to Join</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#1a0a00;min-height:100vh;display:flex;align-items:center;justify-content:center;background-image:url('https://images.unsplash.com/photo-1561948955-570b270e7c36?w=1600&q=80');background-size:cover;background-position:center}
+.overlay{position:fixed;inset:0;background:rgba(10,5,0,.55);backdrop-filter:blur(2px)}
+.card{position:relative;z-index:1;background:rgba(30,16,6,.92);border:1px solid rgba(180,140,80,.3);border-radius:4px;padding:48px 40px 40px;width:100%;max-width:520px;margin:40px 20px;color:#e8d5b0}
+.logo{text-align:center;margin-bottom:24px}
+.diamond{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border:2px solid #c9a84c;transform:rotate(45deg);margin-bottom:16px}
+.diamond span{transform:rotate(-45deg);font-size:13px;font-weight:bold;color:#c9a84c;letter-spacing:1px}
+.brand{font-size:11px;letter-spacing:4px;color:#c9a84c;text-transform:uppercase;margin-bottom:4px}
+.sub{font-size:10px;letter-spacing:3px;color:#8a7a60;text-transform:uppercase;margin-bottom:20px}
+h1{font-size:28px;font-weight:normal;text-align:center;margin-bottom:12px;color:#f0e4c8}
+.desc{text-align:center;font-size:13px;color:#a09070;line-height:1.6;margin-bottom:8px}
+.cities{text-align:center;font-size:10px;letter-spacing:3px;color:#7a6a50;text-transform:uppercase;margin-bottom:28px}
+.slabel{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7a6a50;margin-bottom:12px;margin-top:20px}
+.fg{margin-bottom:14px}
+input,select{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(180,140,80,.25);border-radius:3px;color:#e8d5b0;font-size:14px;outline:none;transition:border-color .2s}
+input::placeholder{color:#6a5a40}
+input:focus,select:focus{border-color:rgba(180,140,80,.6)}
+select option{background:#1a0a00}
+.pr{display:flex;gap:10px}
+.pr select{flex:0 0 180px}
+.pr input{flex:1}
+.hint{font-size:11px;color:#6a5a40;margin-top:5px}
+.btn{width:100%;padding:14px;background:#c9a84c;border:none;border-radius:3px;color:#1a0a00;font-size:14px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-top:20px;transition:background .2s}
+.btn:hover{background:#e0bf6a}
+.btn:disabled{background:#6a5a30;cursor:not-allowed}
+.legal{text-align:center;font-size:11px;color:#6a5a40;margin-top:16px;line-height:1.5}
+.legal a{color:#8a7a60}
+.footer{text-align:center;font-size:9px;letter-spacing:3px;color:#5a4a30;text-transform:uppercase;margin-top:20px}
+.err{color:#e07070;font-size:11px;margin-top:4px;display:none}
+.err.show{display:block}
+.ok{text-align:center;display:none;padding:20px 0}
+.ok.show{display:block}
+.ok h2{font-size:22px;color:#c9a84c;margin-bottom:12px}
+.ok p{font-size:14px;color:#a09070;line-height:1.6}
+.ph{display:flex}
+.ph-flag{display:flex;align-items:center;padding:12px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(180,140,80,.25);border-right:none;border-radius:3px 0 0 3px;font-size:14px;color:#a09070;white-space:nowrap}
+.ph input{border-radius:0 3px 3px 0}
+</style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="card">
+<div class="logo">
+<div class="diamond"><span>BT</span></div>
+<div class="brand">Blind Tiger Guest List</div>
+<div class="sub">Nomadic Series x Modan</div>
+</div>
+<div id="fs">
+<h1>Apply to Join</h1>
+<p class="desc">Join Blind Tiger - an invitation-only after-hours society of founders, investors, artists, musicians, athletes and the few who already know the way in.</p>
+<p class="cities">Miami - LA - NYC - DC - Houston</p>
+<form id="form" novalidate>
+<div class="slabel">Contact Information</div>
+<div class="fg"><input type="text" id="n" placeholder="Your full name" required><div class="err" id="en">Please enter your full name.</div></div>
+<div class="fg"><div class="ph"><div class="ph-flag">US +1</div><input type="tel" id="p" placeholder="Mobile phone" required></div><div class="err" id="ep">A mobile number is required.</div></div>
+<div class="fg"><input type="email" id="e" placeholder="name@example.com" required><div class="err" id="ee">Enter a valid email address.</div></div>
+<div class="slabel">Location and Profile</div>
+<div class="fg">
+<select id="c" required>
+<option value="">What city are you primarily based in?</option>
+<option>Miami, FL</option><option>Los Angeles, CA</option><option>New York City, NY</option><option>Washington, DC</option><option>Houston, TX</option><option>Atlanta, GA</option><option>Austin, TX</option><option>Boston, MA</option><option>Chicago, IL</option><option>Dallas, TX</option><option>San Francisco, CA</option><option>Seattle, WA</option><option>London, UK</option><option>Dubai, UAE</option><option>Other</option>
+</select>
+<div class="err" id="ec">Please select your city.</div>
+</div>
+<div class="fg">
+<div class="pr">
+<select id="pl"><option value="LinkedIn">LinkedIn (Preferred)</option><option value="X / Twitter">X / Twitter</option><option value="Instagram">Instagram</option><option value="Website">Personal website</option></select>
+<input type="text" id="u" placeholder="Username or URL">
+</div>
+<div class="hint">Paste your full LinkedIn URL or just your username</div>
+<div class="err" id="eu">Please add your profile so we can verify you.</div>
+</div>
+<div class="fg">
+<select id="r" required>
+<option value="">How did you hear about us?</option>
+<option>A current member</option><option>A member of the house</option><option>A friend outside the Tiger</option><option>Social media</option><option>Press</option><option>Other</option>
+</select>
+<div class="err" id="er">Please tell us how you heard about us.</div>
+</div>
+<div class="err" id="es" style="text-align:center;font-size:13px"></div>
+<button type="submit" class="btn" id="btn">Apply Now</button>
+<p class="legal">By submitting this form, you agree to receive occasional communications from Blind Tiger. Contact <a href="mailto:hello@theblindtiger.co">hello@theblindtiger.co</a> to withdraw consent.</p>
+</form>
+</div>
+<div class="ok" id="ok"><h2>You are on the list.</h2><p>We will be in touch when the next event opens in your city. Keep it quiet.</p></div>
+<div class="footer">By Invitation Only</div>
+</div>
+<script>
+const T='pat4AOI7yjTl3q780.d045e32fd7f7674d5144a616ff54f71319de9e3b3f93ec7dbf2e7258d5415430';
+const B='appDFJPSGtxF1QqrW';
+const A='Applications';
+const se=(id,v)=>{const el=document.getElementById(id);if(el)el.classList.toggle('show',v)};
+function val(){
+let ok=true;
+const g=id=>document.getElementById(id).value.trim();
+if(!g('n')){se('en',true);ok=false;}else se('en',false);
+if(!g('p')){se('ep',true);ok=false;}else se('ep',false);
+const em=g('e');if(!em||!em.includes('@')){se('ee',true);ok=false;}else se('ee',false);
+if(!document.getElementById('c').value){se('ec',true);ok=false;}else se('ec',false);
+if(!g('u')){se('eu',true);ok=false;}else se('eu',false);
+if(!document.getElementById('r').value){se('er',true);ok=false;}else se('er',false);
+return ok;
+}
+document.getElementById('form').addEventListener('submit',async ev=>{
+ev.preventDefault();
+if(!val())return;
+const btn=document.getElementById('btn');
+btn.disabled=true;btn.textContent='Submitting...';
+document.getElementById('es').style.display='none';
+const fields={'Full Name':document.getElementById('n').value.trim(),'Phone':document.getElementById('p').value.trim(),'Email':document.getElementById('e').value.trim(),'City':document.getElementById('c').value,'Profile Platform':document.getElementById('pl').value,'Profile Username':document.getElementById('u').value.trim(),'How Did You Hear':document.getElementById('r').value,'Submitted At':new Date().toISOString()};
+try{
+const res=await fetch('https://api.airtable.com/v0/'+B+'/'+encodeURIComponent(A),{method:'POST',headers:{'Authorization':'Bearer '+T,'Content-Type':'application/json'},body:JSON.stringify({fields})});
+if(!res.ok){const err=await res.json();throw new Error(err.error?.message||'Failed');}
+document.getElementById('fs').style.display='none';
+document.getElementById('ok').classList.add('show');
+window.scrollTo({top:0,behavior:'smooth'});
+}catch(e){
+const es=document.getElementById('es');
+es.textContent='Something went wrong. Please try again.';
+es.style.display='block';
+btn.disabled=false;btn.textContent='Apply Now';
+}
+});
+</script>
+</body>
+</html>
