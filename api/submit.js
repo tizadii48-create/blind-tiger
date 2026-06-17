@@ -1,11 +1,14 @@
-// Vercel Serverless Function — receives guest-list form submissions
-// and writes them to Airtable. The Airtable token stays server-side
-// via environment variables and is never exposed to the browser.
+// Vercel Serverless Function — receives guest-list form submissions,
+// writes them to Airtable, and emails a notification via Resend.
+// All secrets stay server-side via environment variables.
 //
 // Required environment variables (Vercel → Settings → Environment Variables):
 //   AIRTABLE_TOKEN    Personal Access Token, scope: data.records:write
 //   AIRTABLE_BASE_ID  e.g. appXXXXXXXXXXXXXX
 //   AIRTABLE_TABLE    Table name, e.g. "Applications"
+//   RESEND_API_KEY    Resend API key (re_...). If unset, email is skipped.
+//   NOTIFY_TO         (optional) recipient. Default: aramandzeno@gmail.com
+//   NOTIFY_FROM       (optional) sender. Default: Blind Tiger <hello@blindtigerlist.com>
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -71,10 +74,65 @@ export default async function handler(req, res) {
       console.error('Airtable error', r.status, detail);
       return res.status(502).json({ error: 'Could not save submission.' });
     }
-
-    return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error('Request failed', err);
+    console.error('Airtable request failed', err);
     return res.status(500).json({ error: 'Unexpected error.' });
   }
+
+  // Email notification (best effort — never blocks a saved submission).
+  try {
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const NOTIFY_TO = process.env.NOTIFY_TO || 'aramandzeno@gmail.com';
+    const NOTIFY_FROM =
+      process.env.NOTIFY_FROM || 'Blind Tiger <hello@blindtigerlist.com>';
+
+    if (RESEND_API_KEY) {
+      const rows = [
+        ['Full name', data.full_name],
+        ['Phone', data.phone],
+        ['Email', data.email],
+        ['City', data.city],
+        ['Platform', data.platform],
+        ['Profile', data.profile],
+        ['Heard', data.heard],
+        ['Referrer', data.referrer],
+      ];
+
+      const text = rows.map(([k, v]) => k + ': ' + (v || '—')).join('\n');
+      const html =
+        '<h2>New Blind Tiger application</h2><table cellpadding="6" style="border-collapse:collapse;font-family:sans-serif;font-size:14px">' +
+        rows
+          .map(
+            ([k, v]) =>
+              '<tr><td style="color:#888">' + k + '</td><td><strong>' +
+              (v ? String(v).replace(/[<>&]/g, '') : '—') + '</strong></td></tr>'
+          )
+          .join('') +
+        '</table>';
+
+      const er = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + RESEND_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: NOTIFY_FROM,
+          to: [NOTIFY_TO],
+          reply_to: data.email,
+          subject: 'New application: ' + data.full_name + ' (' + data.city + ')',
+          text,
+          html,
+        }),
+      });
+
+      if (!er.ok) {
+        console.error('Resend error', er.status, await er.text());
+      }
+    }
+  } catch (err) {
+    console.error('Email send failed', err);
+  }
+
+  return res.status(200).json({ ok: true });
 }
