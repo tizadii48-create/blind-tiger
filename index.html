@@ -19,6 +19,45 @@
   </noscript>
 </head>
 <body>
+<script>
+/* Airtable form bridge — added by Tazz.
+   Listens at document level (capture phase) so it survives the bundler's
+   documentElement swap and fires before the app's own submit handler. */
+(function(){
+  function valid(d){
+    if(!d.full_name) return false;
+    if((d.phone||'').replace(/\D/g,'').length < 7) return false;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email||'')) return false;
+    if(!d.city) return false;
+    if(!d.profile) return false;
+    if(!d.heard) return false;
+    return true;
+  }
+  var sending = false;
+  document.addEventListener('submit', function(e){
+    try{
+      var f = e.target;
+      if(!f || !f.querySelector) return;
+      if(!f.querySelector('[name="full_name"]')) return;
+      function v(n){ var el=f.querySelector('[name="'+n+'"]'); return el ? (el.value||'').trim() : ''; }
+      var d = {
+        full_name: v('full_name'), phone: v('phone'), email: v('email'),
+        city: v('city'), platform: v('platform'), profile: v('profile'),
+        heard: v('heard'), referrer: v('referrer')
+      };
+      if(sending || !valid(d)) return;
+      sending = true;
+      fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(d)
+      }).then(function(){ setTimeout(function(){ sending = false; }, 4000); })
+        .catch(function(){ sending = false; });
+    }catch(_){}
+  }, true);
+})();
+</script>
+
   <div id="__bundler_thumbnail">
   <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
     <rect width="1200" height="800" fill="#000000"></rect>
