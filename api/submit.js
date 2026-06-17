@@ -7,7 +7,7 @@
 //   AIRTABLE_BASE_ID  e.g. appXXXXXXXXXXXXXX
 //   AIRTABLE_TABLE    Table name, e.g. "Applications"
 //   RESEND_API_KEY    Resend API key (re_...). If unset, email is skipped.
-//   NOTIFY_TO         (optional) recipient. Default: aramandzeno@gmail.com
+//   NOTIFY_TO         (optional) comma-separated recipients. Default: aramandzeno@gmail.com,tannaz.zenoworlds@gmail.com
 //   NOTIFY_FROM       (optional) sender. Default: Blind Tiger <hello@blindtigerlist.com>
 
 export default async function handler(req, res) {
@@ -82,7 +82,8 @@ export default async function handler(req, res) {
   // Email notification (best effort — never blocks a saved submission).
   try {
     const RESEND_API_KEY = process.env.RESEND_API_KEY;
-    const NOTIFY_TO = process.env.NOTIFY_TO || 'aramandzeno@gmail.com';
+    const NOTIFY_TO = (process.env.NOTIFY_TO || 'aramandzeno@gmail.com,tannaz.zenoworlds@gmail.com')
+      .split(',').map((s) => s.trim()).filter(Boolean);
     const NOTIFY_FROM =
       process.env.NOTIFY_FROM || 'Blind Tiger <hello@blindtigerlist.com>';
 
@@ -118,7 +119,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           from: NOTIFY_FROM,
-          to: [NOTIFY_TO],
+          to: NOTIFY_TO,
           reply_to: data.email,
           subject: 'New application: ' + data.full_name + ' (' + data.city + ')',
           text,
